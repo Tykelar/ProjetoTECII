@@ -21,13 +21,14 @@ for j in range(4):
 
 #max_bin = max(arr_max)
 min_bin = 0
+max_bin = 600000
 
 # Loop over the four files
 for i in range(4):
     # Construct the filename and open the file
 
     # Get the tree and create a new histogram with a unique name
-    hist = ROOT.TH1D("hist_"+str(i), "Histogram "+str(i), 500, min_bin, 1000)
+    hist = ROOT.TH1D("hist_"+str(i), "Histogram "+str(i), 500, min_bin, max_bin)
 
     # Set the histogram color
     hist.SetLineColor(colors[i])
@@ -37,6 +38,8 @@ for i in range(4):
 
     # Add the histogram to the combined histogram
     combined_hist.Add(hist)
+
+canvas.SetLogy()
 
 # Draw the combined histogram on the canvas
 combined_hist.Draw("nostack")
@@ -56,4 +59,3 @@ leg.Draw()
 
 # array em numpy
 # ver max e min
-
