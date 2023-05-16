@@ -3,6 +3,7 @@ import numpy as np
 import sys
 
 # Create a canvas to display the histograms
+
 canvas = ROOT.TCanvas("canvas", "Canvas")
 
 # Create an empty combined histogram
@@ -11,8 +12,9 @@ combined_hist = ROOT.THStack("combined_hist", "Combined Histogram")
 # Define a list of colors for each file
 colors = [ROOT.kRed, ROOT.kBlue, ROOT.kGreen, ROOT.kOrange]
 
-filename = "AmberTarget_Run_" + str(0) + ".root"
+filename = sys.argv[1]
 f = ROOT.TFile.Open(filename, "READ")
+results_file=ROOT.TFile.Open(filename.replace("AmberTarget","results"),"RECREATE")
 
 tree = f.Get("edep_Per_Event")
 
@@ -26,25 +28,28 @@ max_bin = 600000
 
 # Loop over the four files
 for i in range(4):
-    # Construct the filename and open the file
+	# Construct the filename and open the file
 
-    # Get the tree and create a new histogram with a unique name
-    hist = ROOT.TH1D("hist_"+str(i), "Histogram "+str(i), 500, min_bin, max_bin)
+	# Get the tree and create a new histogram with a unique name
+	hist = ROOT.TH1D("hist_"+str(i), "Histogram "+str(i), 500, min_bin, max_bin)
 
-    # Set the histogram color
-    hist.SetLineColor(colors[i])
+	# Set the histogram color
+	hist.SetLineColor(colors[i])
 
-    # Fill the histogram with data from the tree
-    tree.Draw("detector"+str(i)+ ">>hist_"+str(i), "detector"+str(i)+" > 0")
+	# Fill the histogram with data from the tree
+	tree.Draw("detector"+str(i)+ ">>hist_"+str(i), "detector"+str(i)+" > 0")
 
-    # Add the histogram to the combined histogram
-    combined_hist.Add(hist)
+	# Add the histogram to the combined histogram
+	combined_hist.Add(hist)
 
-canvas.SetLogy()
+	ROOT.gPad.SetLogy()
+	results_file.cd()
+	hist.Write()
 
 # Draw the combined histogram on the canvas
 combined_hist.Draw("nostack")
-
+results_file.cd()
+combined_hist.Write()
 # Update the canvas and save it to a PDF file
 canvas.Update()
 canvas.Print("combined_histogram.pdf")
@@ -56,7 +61,10 @@ leg.SetBorderSize(0)
 leg.SetFillColor(0)
 leg.SetFillStyle(0)
 leg.AddEntry(combined_hist, "Deposicao de energia", "combined_hist")
+hist.GetXaxis().SetTitle("Deposição de energia")
+hist.GetYaxis().SetTitle("Y")
+hist.Draw()
 leg.Draw()
 
 # array em numpy
-# ver max e min
+# ver max e min 
