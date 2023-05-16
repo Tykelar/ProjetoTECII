@@ -1,5 +1,6 @@
 import ROOT
 import numpy as np
+import sys
 
 # Create a canvas to display the histograms
 canvas = ROOT.TCanvas("canvas", "Canvas")
