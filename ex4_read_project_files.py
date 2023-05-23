@@ -14,7 +14,7 @@ import sys
 canvas4 = ROOT.TCanvas("canvas4", "Canvas 4")
 
 # Create an empty combined histogram
-combined_hist4 = ROOT.THStack("combined_hist4", "Combined Histogram 4")
+combined_hist4 = ROOT.THStack("combined_hist4", "Vertex hadronico em funcao de Z")
 
 # Define a list of colors for each file
 colors = [ROOT.kRed, ROOT.kBlue, ROOT.kGreen, ROOT.kOrange]
