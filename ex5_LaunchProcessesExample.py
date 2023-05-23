@@ -24,4 +24,4 @@ if __name__ == "__main__":  # Allows for the safe importing of the main module
 #adicionar aqui o hadd
 	
 os.system("rm finalResults_ex5.root")
-os.system("hadd finalResults_ex5.root results_*.root")
+os.system("hadd finalResults_ex5.root results_5*.root")
