@@ -7,7 +7,7 @@ import multiprocessing  # the module we will be using for multiprocessing
 def work(Run):
 
 	WORKING_DIRECTORY=os.getcwd()
-	os.system("python3 read_project_files_ex1.py AmberTarget_Run_"+str(Run)+".root")
+	os.system("python3 ex1_read_project_files.py AmberTarget_Run_"+str(Run)+".root")
 	print ("Unit of work number %d" % Run ) # simply print the worker's number
 
 if __name__ == "__main__":  # Allows for the safe importing of the main module
