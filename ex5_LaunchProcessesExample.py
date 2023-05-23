@@ -8,7 +8,7 @@ def work(Run):
 
 	WORKING_DIRECTORY=os.getcwd()
 	# mudar o nome do ficheiro python
-	os.system("python3 -i projeto5.py AmberTarget_Run_"+str(Run)+".root")
+	os.system("python3 -i ex5_read_project_files.py AmberTarget_Run_"+str(Run)+".root")
 	print ("Unit of work number %d" % Run ) # simply print the worker's number
 
 if __name__ == "__main__":  # Allows for the safe importing of the main module
