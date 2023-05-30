@@ -15,11 +15,11 @@ results_file=ROOT.TFile.Open(filename.replace("AmberTarget","results"),"RECREATE
 tree = f.Get("Hits")
 #tree.Scan("*", "IsPrimary==1")
 
-arr_max = np.zeros(2)
-d = {"0": "X", "1": "Y"}
-values_list = list(d.values())
-for j in range(2):
-	arr_max[j] = tree.GetMaximum("hitPos" + values_list[j] + "_cm")
+#arr_max = np.zeros(2)
+#d = {"0": "X", "1": "Y"}
+#values_list = list(d.values())
+#for j in range(2):
+#	arr_max[j] = tree.GetMaximum("hitPos" + values_list[j] + "_cm")
 
 #max_bin = max(arr_max)
 minx = -40
@@ -50,4 +50,3 @@ for i in range(4):
 
 	results_file.cd()
 	hist[i].Write()
-

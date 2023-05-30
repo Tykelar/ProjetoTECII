@@ -1,15 +1,14 @@
-#!/usr/bin/env python
+#Ex2
 import os
 import time
 import random
 import multiprocessing  # the module we will be using for multiprocessing
 
-def work(Run):
+def work(Run2):
 
 	WORKING_DIRECTORY=os.getcwd()
-	# mudar o nome do ficheiro python
-	os.system("python3 -i projeto5.py AmberTarget_Run_"+str(Run)+".root")
-	print ("Unit of work number %d" % Run ) # simply print the worker's number
+	os.system("python3 ex2_read_project_files.py AmberTarget_Run_"+str(Run2)+".root")
+	print ("Unit of work number %d" % Run2 ) # simply print the worker's number
 
 if __name__ == "__main__":  # Allows for the safe importing of the main module
 	print("There are %d CPUs on this machine" % multiprocessing.cpu_count())
@@ -23,5 +22,5 @@ if __name__ == "__main__":  # Allows for the safe importing of the main module
 
 #adicionar aqui o hadd
 	
-os.system("rm finalResults_ex5.root")
-os.system("hadd finalResults_ex5.root results_*.root")
+os.system("rm finalResults2.root")
+os.system("hadd finalResults2.root results_Run_*.root")

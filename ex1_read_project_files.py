@@ -12,6 +12,7 @@ combined_hist = ROOT.THStack("combined_hist", "Combined Histogram")
 # Define a list of colors for each file
 colors = [ROOT.kRed, ROOT.kBlue, ROOT.kGreen, ROOT.kOrange]
 
+
 filename = sys.argv[1]
 f = ROOT.TFile.Open(filename, "READ")
 results_file=ROOT.TFile.Open(filename.replace("AmberTarget","results"),"RECREATE")
@@ -61,10 +62,13 @@ leg.SetBorderSize(0)
 leg.SetFillColor(0)
 leg.SetFillStyle(0)
 leg.AddEntry(combined_hist, "Deposicao de energia", "combined_hist")
+<<<<<<< HEAD:read_project_files_ex1.py
 hist.GetXaxis().SetTitle("Comprimento")
 hist.GetYaxis().SetTitle("Deposição de energia")
 hist.Draw()
+=======
+>>>>>>> 341c7d97f160b9d4da43a8a13c485d22383948a3:ex1_read_project_files.py
 leg.Draw()
 
 # array em numpy
-# ver max e min 
+# ver max e min
