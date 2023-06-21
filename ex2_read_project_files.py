@@ -3,63 +3,67 @@ import numpy as np
 import sys
 
 # Create a canvas to display the histograms
+canvas = ROOT.TCanvas("canvas", "Canvas", 800, 600)
 
-canvas = ROOT.TCanvas("canvas", "Canvas")
+# Divide the canvas into two pads
+canvas.Divide(1, 3)
 
-# Create an empty combined histogram
-combined_hist2 = ROOT.THStack("combined_hist2", "Combined Histogram Ex2")
 
-# Define a list of colors for each file
+# Create an empty combined histogram for each particle
+combined_hist = {211: ROOT.THStack("combined_hist_211", "PDG 211 - Deposicao de energia dos pioes nos 4 detetores"), 
+                 13: ROOT.THStack("combined_hist_13", "PDG 13 - Deposicao de energia dos muoes nos 4 detetores"),
+                 "other": ROOT.THStack("combined_hist_other", "Deposicao de energia das restantes particulas nos 4 detetores")}
+
+
+# Define a list of colors for each detector
 colors = [ROOT.kRed, ROOT.kBlue, ROOT.kGreen, ROOT.kOrange]
 
+filename = sys.argv[1]
+f = ROOT.TFile.Open(filename, "READ")
+results_file = ROOT.TFile.Open(filename.replace("AmberTarget", "results"), "RECREATE")
 
-filename2 = sys.argv[1]
-f2 = ROOT.TFile.Open(filename2, "READ")
-results_file2 =ROOT.TFile.Open(filename2.replace("AmberTarget","results"),"RECREATE")
+tree = f.Get("tracksData")
 
-tree2 = f2.Get("tracksData")
-
-#max_bin = max(arr_max)
 min_bin = 0.00001
-max_bin = 600000
+max_bin = 60000
 
-hist2={}
+hist = {}
 
-# Loop over the four files
+# Loop over the detectors and particle types
 for i in range(4):
-	# Construct the filename and open the file
+    for pdg in [211, 13, "other"]:
+        if pdg == "other":
+            selection = f"particlePDG != 211 && particlePDG != -211 && particlePDG != 13 && particlePDG != -13"
+        else:
+            selection = f"particlePDG == {pdg} || particlePDG == -{pdg}"
+        
+        # Create a new histogram with a unique name
+        hist[i, pdg] = ROOT.TH1D(f"hist_{i}_{pdg}", f"Detector {i+1} - Particle PDG {pdg}", 500, min_bin, max_bin)
+        
+        # Set the histogram color
+        hist[i, pdg].SetLineColor(colors[i])
 
-	# Get the tree and create a new histogram with a unique name
-	hist2[i] = ROOT.TH1D("hist2_"+str(i), "Histogram "+str(i), 500, min_bin, max_bin)
-	
-	# Set the histogram color
-	hist2[i].SetLineColor(colors[i])
+        # Fill the histogram with data from the tree for the specific particle PDG in the current detector
+        #tree.Draw(f"EdepDet{i}_keV>>hist_{i}_{pdg}", f"particlePDG == {pdg} || particlePDG == -{pdg}", "goff")
+        tree.Draw(f"EdepDet{i}_keV>>hist_{i}_{pdg}", selection, "goff")
 
-	# Fill the histogram with data from the tree
-	tree2.Draw("EdepDet" + str(i)+"_keV>>hist2_"+str(i), "particlePDG==211 || particlePDG == -211 || particlePDG == 13 || particlePDG == -13 ","goff")
+        # Add the histogram to the combined histogram for the specific particle PDG
+        combined_hist[pdg].Add(hist[i, pdg])
 
-	# Add the histogram to the combined histogram
-	combined_hist2.Add(hist2[i])
-	
-	#ROOT.gPad.SetLogy()
-	results_file2.cd()
-	hist2[i].Write()
+        # Write the histogram to the output file
+        results_file.cd()
+        hist[i, pdg].Write()
 
-# Draw the combined histogram on the canvas
-combined_hist2.Draw("nostack")
-ROOT.gPad.SetLogy()
-results_file2.cd()
-combined_hist2.Write()
-# Update the canvas and save it to a PDF file
+for i, pdg in enumerate([211, 13, "other"]):
+    canvas.cd(i+1)  # Select the i-th pad on the canvas
+    combined_hist[pdg].Draw("nostack")
+    ROOT.gPad.SetLogy()
+    results_file.cd()
+    combined_hist[pdg].Write()
+
 canvas.Update()
-canvas.Print("combined_hist2.pdf")
+canvas.Print("combined_hist.pdf")
 
-leg = ROOT.TLegend(0.6,0.7,0.9,0.9)
-leg.SetTextFont(42)
-leg.SetTextSize(0.04)
-leg.SetBorderSize(0)
-leg.SetFillColor(0)
-leg.SetFillStyle(0)
-leg.AddEntry(combined_hist2, "Deposicao de energia Piões e Muões", "combined_hist2")
-leg.Draw()
-
+# Close the files
+f.Close()
+results_file.Close()
