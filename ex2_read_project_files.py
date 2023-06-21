@@ -10,9 +10,9 @@ canvas.Divide(1, 3)
 
 
 # Create an empty combined histogram for each particle
-combined_hist = {211: ROOT.THStack("combined_hist_211", "Combined Histogram for PDG 211"), 
-                 13: ROOT.THStack("combined_hist_13", "Combined Histogram for PDG 13"),
-                 "other": ROOT.THStack("combined_hist_other", "Combined Histogram for other particles")}
+combined_hist = {211: ROOT.THStack("combined_hist_211", "PDG 211 - Deposicao de energia dos pioes nos 4 detetores"), 
+                 13: ROOT.THStack("combined_hist_13", "PDG 13 - Deposicao de energia dos muoes nos 4 detetores"),
+                 "other": ROOT.THStack("combined_hist_other", "Deposicao de energia das restantes particulas nos 4 detetores")}
 
 
 # Define a list of colors for each detector
